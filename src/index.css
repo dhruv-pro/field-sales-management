@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth transitions for theme switching */
+* {
+  @apply transition-colors duration-300;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-neutral-100 text-neutral-900;
+}
+
+html.dark {
+  @apply bg-neutral-950 text-neutral-50;
+}
+
+html.dark body {
+  @apply bg-neutral-950 text-neutral-50;
+}
+
+html.dark .bg-white {
+  @apply bg-neutral-900;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-neutral-100 {
+  @apply bg-neutral-950;
+}
+
+html.dark .bg-slate-100,
+html.dark .bg-gray-100,
+html.dark .bg-neutral-200 {
+  @apply bg-neutral-800;
+}
+
+html.dark .bg-red-50,
+html.dark .bg-red-50\/40 {
+  @apply bg-red-950/30;
+}
+
+html.dark .bg-blue-50 {
+  @apply bg-blue-950/30;
+}
+
+html.dark .hover\:bg-blue-50:hover,
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-slate-50\/60:hover,
+html.dark .hover\:bg-neutral-50:hover {
+  @apply bg-neutral-800;
+}
+
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html.dark .border-slate-300,
+html.dark .border-neutral-200 {
+  @apply border-neutral-800;
+}
+
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  @apply border-neutral-800;
+}
+
+html.dark .text-gray-900,
+html.dark .text-slate-900,
+html.dark .text-neutral-900 {
+  @apply text-neutral-50;
+}
+
+html.dark .text-gray-700,
+html.dark .text-slate-700,
+html.dark .text-neutral-700 {
+  @apply text-neutral-200;
+}
+
+html.dark .text-gray-600,
+html.dark .text-slate-600,
+html.dark .text-neutral-600 {
+  @apply text-neutral-300;
+}
+
+html.dark .text-gray-500,
+html.dark .text-slate-500,
+html.dark .text-neutral-500 {
+  @apply text-neutral-400;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  @apply border-neutral-700 bg-neutral-950 text-neutral-50 placeholder:text-neutral-500;
+}
+
+html.dark table {
+  @apply text-neutral-200;
+}
+
+/* Remove transition from interactive elements that handle their own */
+button,
+a,
+input,
+select,
+textarea {
+  @apply transition-all duration-200;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-100;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  @apply bg-neutral-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-300 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-400;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  @apply bg-neutral-700 rounded;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-600;
+}
+
+/* Card styles */
+.card {
+  @apply rounded-lg border bg-white p-6 shadow-sm transition-colors duration-300;
+}
+
+html.dark .card {
+  @apply border-neutral-800 bg-neutral-900;
+}
