@@ -156,90 +156,117 @@ const AttendancePage = () => {
 
     return (
         <>
-            <div className="max-w-xl mx-auto p-6 bg-white shadow rounded-lg">
-                <h2 className="text-xl font-bold mb-4">Attendance</h2>
+            <div className="max-w-2xl mx-auto p-6">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-800">
+                        Attendance Dashboard
+                    </h2>
+                </div>
 
-                <div className="border p-4 rounded mb-4">
-                    <p>
-                        <b>Status:</b>{" "}
+                {/* Main Card */}
+                <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 space-y-5">
+
+                    {/* Status Row */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-gray-600 font-medium">Status</span>
+
                         <span
-                            style={{
-                                color:
-                                    today?.attendance?.status === "WORKING"
-                                        ? "green"
-                                        : today?.attendance?.status === "ON_BREAK"
-                                            ? "orange"
-                                            : today?.attendance?.status === "COMPLETED"
-                                                ? "red"
-                                                : "gray",
-                                fontWeight: "bold",
-                            }}
+                            className={`px-3 py-1 rounded-full text-sm font-semibold ${today?.attendance?.status === "WORKING"
+                                    ? "bg-green-100 text-green-700"
+                                    : today?.attendance?.status === "ON_BREAK"
+                                        ? "bg-yellow-100 text-yellow-700"
+                                        : today?.attendance?.status === "COMPLETED"
+                                            ? "bg-red-100 text-red-700"
+                                            : "bg-gray-100 text-gray-600"
+                                }`}
                         >
                             {today?.attendance?.status || "NOT_STARTED"}
                         </span>
-                    </p>
-                    <p>
-                        <b>Check In:</b>{" "}
-                        {today?.attendance?.clockInTime
-                            ? new Date(
-                                today.attendance.clockInTime
-                            ).toLocaleTimeString()
-                            : "-"}
-                    </p>
-                    <p>
-                        <b>Live Timer:</b> {formatTime(loginSeconds)}
-                    </p>
-                    <p>
-                        <b>Break Timer:</b> {formatTime(breakSeconds)}
-                    </p>
-                    <p>
-                        <b>Working Hours:</b> {today?.attendance?.workingHours || 0}
-                    </p>
-                </div>
+                    </div>
 
-                <div className="flex gap-3">
-                    <button
-                        onClick={handleCheckIn}
-                        disabled={loading || !!today?.attendance?.clockInTime}
-                        className="px-4 py-2 bg-green-600 text-white rounded"
-                    >
-                        Check In
-                    </button>
+                    {/* Info Grid */}
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                            <p className="text-gray-500">Check In</p>
+                            <p className="font-semibold text-gray-800">
+                                {today?.attendance?.clockInTime
+                                    ? new Date(today.attendance.clockInTime).toLocaleTimeString()
+                                    : "-"}
+                            </p>
+                        </div>
 
-                    <button
-                        onClick={handleCheckOut}
-                        disabled={
-                            loading ||
-                            !today?.attendance?.clockInTime ||
-                            !!today?.attendance?.clockOutTime
-                        }
-                        className="px-4 py-2 bg-red-600 text-white rounded"
-                    >
-                        Check Out
-                    </button>
-                    <button
-                        onClick={handleStartBreak}
-                        disabled={
-                            loading ||
-                            !today?.attendance?.clockInTime ||
-                            !!today?.attendance?.clockOutTime ||
-                            today?.isBreakRunning
-                        }
-                        className="px-4 py-2 bg-yellow-500 text-white rounded"
-                    >
-                        Start Break
-                    </button>
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                            <p className="text-gray-500">Working Hours</p>
+                            <p className="font-semibold text-gray-800">
+                                {today?.attendance?.workingHours || 0} hrs
+                            </p>
+                        </div>
 
-                    <button
-                        onClick={handleEndBreak}
-                        disabled={loading || !today?.isBreakRunning}
-                        className="px-4 py-2 bg-orange-500 text-white rounded"
-                    >
-                        End Break
-                    </button>
+                        <div className="p-3 bg-blue-50 rounded-lg">
+                            <p className="text-blue-500">Live Timer</p>
+                            <p className="text-lg font-bold text-blue-700">
+                                {formatTime(loginSeconds)}
+                            </p>
+                        </div>
+
+                        <div className="p-3 bg-orange-50 rounded-lg">
+                            <p className="text-orange-500">Break Timer</p>
+                            <p className="text-lg font-bold text-orange-600">
+                                {formatTime(breakSeconds)}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex flex-wrap gap-3 pt-2">
+                        <button
+                            onClick={handleCheckIn}
+                            disabled={loading || !!today?.attendance?.clockInTime}
+                            className="px-4 py-2 rounded-lg bg-green-600 text-white font-medium
+                     hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            Check In
+                        </button>
+
+                        <button
+                            onClick={handleCheckOut}
+                            disabled={
+                                loading ||
+                                !today?.attendance?.clockInTime ||
+                                !!today?.attendance?.clockOutTime
+                            }
+                            className="px-4 py-2 rounded-lg bg-red-600 text-white font-medium
+                     hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            Check Out
+                        </button>
+
+                        <button
+                            onClick={handleStartBreak}
+                            disabled={
+                                loading ||
+                                !today?.attendance?.clockInTime ||
+                                !!today?.attendance?.clockOutTime ||
+                                today?.isBreakRunning
+                            }
+                            className="px-4 py-2 rounded-lg bg-yellow-500 text-white font-medium
+                     hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            Start Break
+                        </button>
+
+                        <button
+                            onClick={handleEndBreak}
+                            disabled={loading || !today?.isBreakRunning}
+                            className="px-4 py-2 rounded-lg bg-orange-500 text-white font-medium
+                     hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                        >
+                            End Break
+                        </button>
+                    </div>
                 </div>
             </div>
-
         </>
     );
 };
