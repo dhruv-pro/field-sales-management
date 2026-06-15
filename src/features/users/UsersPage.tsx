@@ -7,6 +7,7 @@ import { createUser, deleteUser, fetchUsers, updateUser } from "./usersSlice";
 import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateUserRequest, UpdateUserRequest, UserFormValues } from "./usersTypes";
 import Pagination from "../../components/common/Pagination";
+import { FaSpinner } from "react-icons/fa";
 
 const defaultFormValues: UserFormValues = {
     firstName: "",
@@ -315,7 +316,9 @@ const UsersPage = () => {
                 </div>
 
                 {loading ? (
-                    <div className="space-y-3 text-sm text-slate-600">Loading users...</div>
+                    <div className="flex items-center justify-center ">
+                        <FaSpinner className="animate-spin text-xl" />
+                    </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-slate-200 text-sm">
