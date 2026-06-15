@@ -6,6 +6,7 @@ import ConfirmModal from "../../components/common/ConfirmModal";
 import { createUser, deleteUser, fetchUsers, updateUser } from "./usersSlice";
 import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateUserRequest, UpdateUserRequest, UserFormValues } from "./usersTypes";
+import Pagination from "../../components/common/Pagination";
 
 const defaultFormValues: UserFormValues = {
     firstName: "",
@@ -26,6 +27,9 @@ const UsersPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [deleteId, setDeleteId] = useState<string | null>(null);
+    const ITEMS_PER_PAGE = 5;
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -160,6 +164,14 @@ const UsersPage = () => {
         setConfirmOpen(false);
         setDeleteId(null);
     };
+    const totalPages = Math.ceil(
+        filteredUsers.length / ITEMS_PER_PAGE
+    );
+
+    const paginatedUsers = filteredUsers.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
     return (
         <div className="space-y-6">
@@ -173,7 +185,10 @@ const UsersPage = () => {
                     <input
                         type="text"
                         value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
+                        onChange={(event) => {
+                            setSearchTerm(event.target.value);
+                            setCurrentPage(1);
+                        }}
                         placeholder="Search users"
                         className="w-full rounded border border-slate-300 bg-slate-50 px-3 py-2 outline-none focus:border-slate-500 sm:w-72"
                     />
@@ -315,14 +330,14 @@ const UsersPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 bg-white">
-                                {filteredUsers.length === 0 ? (
+                                {paginatedUsers.length === 0 ? (
                                     <tr>
                                         <td colSpan={6} className="px-4 py-6 text-center text-sm text-slate-500">
                                             No users found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredUsers.map((user) => (
+                                    paginatedUsers.map((user) => (
                                         <tr key={user._id}>
                                             <td className="px-4 py-4 text-slate-900">
                                                 {user.firstName} {user.lastName}
@@ -362,6 +377,11 @@ const UsersPage = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </div>
                 )}
             </section>

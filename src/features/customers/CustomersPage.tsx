@@ -10,6 +10,7 @@ import {
 } from "./customersSlice";
 import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateCustomerRequest, CustomerFormValues, UpdateCustomerRequest } from "./customersTypes";
+import Pagination from "../../components/common/Pagination";
 
 const defaultFormValues: CustomerFormValues = {
     customerCode: "",
@@ -31,6 +32,9 @@ const CustomersPage = () => {
     const [selectedCustomer, setSelectedCustomer] = useState<CustomerFormValues | null>(null);
     const [formValues, setFormValues] = useState<CustomerFormValues>(defaultFormValues);
     const [searchTerm, setSearchTerm] = useState("");
+    const ITEMS_PER_PAGE = 5;
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         dispatch(fetchCustomers());
@@ -170,6 +174,14 @@ const CustomersPage = () => {
             // handled by slice / toast
         }
     };
+    const totalPages = Math.ceil(
+        filteredCustomers.length / ITEMS_PER_PAGE
+    );
+
+    const paginatedCustomers = filteredCustomers.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
     return (
         <div className="space-y-6">
@@ -183,7 +195,10 @@ const CustomersPage = () => {
                     <input
                         type="text"
                         value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
+                        onChange={(event) => {
+                            setSearchTerm(event.target.value);
+                            setCurrentPage(1);
+                        }}
                         placeholder="Search customers"
                         className="w-full rounded border border-slate-300 bg-slate-50 px-3 py-2 outline-none focus:border-slate-500 sm:w-72"
                     />
@@ -351,14 +366,14 @@ const CustomersPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 bg-white">
-                                {filteredCustomers.length === 0 ? (
+                                {paginatedCustomers.length === 0 ? (
                                     <tr>
                                         <td colSpan={7} className="px-4 py-6 text-center text-sm text-slate-500">
                                             No customers found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredCustomers.map((customer) => (
+                                    paginatedCustomers.map((customer) => (
                                         <tr key={customer._id}>
                                             <td className="px-4 py-4 text-slate-900">{customer.customerCode}</td>
                                             <td className="px-4 py-4 text-slate-900">{customer.customerName}</td>
@@ -389,6 +404,11 @@ const CustomersPage = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </div>
                 )}
             </section>

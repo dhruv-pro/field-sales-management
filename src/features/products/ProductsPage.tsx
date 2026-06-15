@@ -11,6 +11,7 @@ import {
 } from "./productsSlice";
 import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateProductRequest, ProductFormValues, UpdateProductRequest } from "./productsTypes";
+import Pagination from "../../components/common/Pagination";
 
 type ProductFormState = Omit<ProductFormValues, "price" | "stock"> & {
     price: string;
@@ -36,6 +37,9 @@ const ProductsPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [deleteId, setDeleteId] = useState<string | null>(null);
+    const ITEMS_PER_PAGE = 5;
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -167,6 +171,15 @@ const ProductsPage = () => {
         setDeleteId(null);
     };
 
+    const totalPages = Math.ceil(
+        filteredProducts.length / ITEMS_PER_PAGE
+    );
+
+    const paginatedProducts = filteredProducts.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -179,7 +192,10 @@ const ProductsPage = () => {
                     <input
                         type="text"
                         value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
+                        onChange={(event) => {
+                            setSearchTerm(event.target.value);
+                            setCurrentPage(1);
+                        }}
                         placeholder="Search products"
                         className="w-full rounded border border-slate-300 bg-slate-50 px-3 py-2 outline-none focus:border-slate-500 sm:w-72"
                     />
@@ -320,14 +336,14 @@ const ProductsPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 bg-white">
-                                {filteredProducts.length === 0 ? (
+                                {paginatedProducts.length === 0 ? (
                                     <tr>
                                         <td colSpan={8} className="px-4 py-6 text-center text-sm text-slate-500">
                                             No products found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredProducts.map((product) => (
+                                    paginatedProducts.map((product) => (
                                         <tr key={product._id}>
                                             <td className="px-4 py-4 text-slate-900">{product.sku ?? "—"}</td>
                                             <td className="px-4 py-4 text-slate-900">{product.productName}</td>
@@ -359,6 +375,11 @@ const ProductsPage = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </div>
                 )}
             </section>

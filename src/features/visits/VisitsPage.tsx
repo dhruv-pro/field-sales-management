@@ -17,6 +17,7 @@ import {
     getVisitImageUrl,
     visitStatusStyles,
 } from "./visitUtils";
+import Pagination from "../../components/common/Pagination";
 
 const defaultFormValues: VisitFormValues = {
     customer: "",
@@ -122,6 +123,9 @@ const VisitsPage = () => {
     const [uploadingPhotoVisitId, setUploadingPhotoVisitId] = useState<string | null>(null);
     const [uploadingSelfieVisitId, setUploadingSelfieVisitId] = useState<string | null>(null);
     const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
+    const ITEMS_PER_PAGE = 5;
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     const refreshVisits = () => {
         if (userRole === "employee") {
@@ -321,6 +325,14 @@ const VisitsPage = () => {
     };
 
     const pageTitle = userRole === "employee" ? "My Visits" : "Visit Management";
+    const totalPages = Math.ceil(
+        filteredVisits.length / ITEMS_PER_PAGE
+    );
+
+    const paginatedVisits = filteredVisits.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
 
     return (
@@ -337,7 +349,10 @@ const VisitsPage = () => {
                     <input
                         type="text"
                         value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
+                        onChange={(event) => {
+                            setSearchTerm(event.target.value);
+                            setCurrentPage(1);
+                        }}
                         placeholder="Search by customer, address, status..."
                         className="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 outline-none focus:border-slate-500 sm:w-72"
                     />
@@ -463,14 +478,14 @@ const VisitsPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100 bg-white">
-                                {filteredVisits.length === 0 ? (
+                                {paginatedVisits.length === 0 ? (
                                     <tr>
                                         <td colSpan={9} className="px-4 py-10 text-center text-sm text-slate-500">
                                             No visits found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredVisits.map((visit) => {
+                                    paginatedVisits.map((visit) => {
                                         const selfieUrl = getVisitImageUrl(visit.selfiePhoto);
                                         const visitPhotoUrls =
                                             visit.visitPhotos
@@ -626,6 +641,11 @@ const VisitsPage = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </div>
                 )}
             </section>

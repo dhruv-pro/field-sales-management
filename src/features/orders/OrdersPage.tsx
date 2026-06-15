@@ -8,6 +8,7 @@ import { fetchProducts } from "../products/productsSlice";
 import { fetchVisits } from "../visits/visitsSlice";
 import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateOrderRequest, OrderFormValues, UpdateOrderRequest } from "./ordersTypes";
+import Pagination from "../../components/common/Pagination";
 
 const defaultFormValues: OrderFormValues = {
     customer: "",
@@ -31,6 +32,9 @@ const OrdersPage = () => {
     const [selectedOrder, setSelectedOrder] = useState<OrderFormValues | null>(null);
     const [formValues, setFormValues] = useState<OrderFormValues>(defaultFormValues);
     const [searchTerm, setSearchTerm] = useState("");
+    const ITEMS_PER_PAGE = 5;
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         dispatch(fetchOrders());
@@ -181,6 +185,15 @@ const OrdersPage = () => {
         }
     };
 
+    const totalPages = Math.ceil(
+        filteredOrders.length / ITEMS_PER_PAGE
+    );
+
+    const paginatedOrders = filteredOrders.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -193,7 +206,10 @@ const OrdersPage = () => {
                     <input
                         type="text"
                         value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
+                        onChange={(event) => {
+                            setSearchTerm(event.target.value);
+                            setCurrentPage(1);
+                        }}
                         placeholder="Search orders"
                         className="w-full rounded border border-slate-300 bg-slate-50 px-3 py-2 outline-none focus:border-slate-500 sm:w-72"
                     />
@@ -356,14 +372,14 @@ const OrdersPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 bg-white">
-                                {filteredOrders.length === 0 ? (
+                                {paginatedOrders.length === 0 ? (
                                     <tr>
                                         <td colSpan={6} className="px-4 py-6 text-center text-sm text-slate-500">
                                             No orders found.
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredOrders.map((order) => (
+                                    paginatedOrders.map((order) => (
                                         <tr key={order._id}>
                                             <td className="px-4 py-4 text-slate-900">{order.orderNumber ?? order._id}</td>
                                             <td className="px-4 py-4 text-slate-500">
@@ -397,6 +413,11 @@ const OrdersPage = () => {
                                 )}
                             </tbody>
                         </table>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
                     </div>
                 )}
             </section>
