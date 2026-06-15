@@ -20,7 +20,7 @@ const Navbar = () => {
     };
 
     return (
-        <header className={`border-b transition-colors duration-300 px-6 py-4 shadow-sm ${isDark
+        <header className={`sticky top-0 z-50  border-b transition-colors duration-300 px-6 py-4 shadow-sm ${isDark
             ? "border-neutral-800 bg-neutral-900"
             : "border-neutral-200 bg-white"
             }`}>
