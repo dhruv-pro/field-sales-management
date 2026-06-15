@@ -18,6 +18,7 @@ import {
     visitStatusStyles,
 } from "./visitUtils";
 import Pagination from "../../components/common/Pagination";
+import { FaSpinner } from "react-icons/fa";
 
 const defaultFormValues: VisitFormValues = {
     customer: "",
@@ -460,7 +461,9 @@ const VisitsPage = () => {
                 </div>
 
                 {loading ? (
-                    <div className="px-6 py-10 text-sm text-slate-600">Loading visits...</div>
+                    <div className="flex items-center justify-center ">
+                        <FaSpinner className="animate-spin text-xl" />
+                    </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-[1100px] w-full text-sm">

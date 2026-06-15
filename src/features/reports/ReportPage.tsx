@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/axios";
+import { FaSpinner } from "react-icons/fa";
 
 type TabType = "visits" | "sales" | "performance";
 
@@ -201,8 +202,8 @@ const ReportPage: React.FC = () => {
                             key={tab}
                             onClick={() => setActiveTab(tab)}
                             className={`px-4 py-2 rounded capitalize ${activeTab === tab
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-100"
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-100"
                                 }`}
                         >
                             {tab}
@@ -219,7 +220,9 @@ const ReportPage: React.FC = () => {
             </div>
 
             {/* States */}
-            {loading && <p className="text-blue-600">Loading report...</p>}
+            {loading && <div className="flex items-center justify-center">
+                <FaSpinner className="animate-spin text-xl" />
+            </div>}
             {error && <p className="text-red-500">{error}</p>}
 
             {/* Content */}

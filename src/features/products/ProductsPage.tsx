@@ -12,6 +12,7 @@ import {
 import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateProductRequest, ProductFormValues, UpdateProductRequest } from "./productsTypes";
 import Pagination from "../../components/common/Pagination";
+import { FaSpinner } from "react-icons/fa";
 
 type ProductFormState = Omit<ProductFormValues, "price" | "stock"> & {
     price: string;
@@ -319,7 +320,9 @@ const ProductsPage = () => {
                 </div>
 
                 {loading ? (
-                    <div className="space-y-3 text-sm text-slate-600">Loading products...</div>
+                    <div className="flex items-center justify-center ">
+                        <FaSpinner className="animate-spin text-xl" />
+                    </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-slate-200 text-sm">
