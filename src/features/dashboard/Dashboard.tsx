@@ -20,6 +20,7 @@ import {
     Cell,
     CartesianGrid
 } from "recharts";
+import { FaSpinner } from "react-icons/fa";
 
 
 
@@ -37,7 +38,11 @@ const DashboardPage = () => {
     }, [attendanceLimit, attendancePage, dispatch]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <FaSpinner className="animate-spin text-xl" />
+            </div>
+        );
     }
     const revenueData = [
         { month: "Jan", revenue: 12000 },
@@ -154,7 +159,7 @@ const DashboardPage = () => {
             hover:border-blue-200
             "
                     >
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
                                 <p className="text-sm text-gray-500">
                                     {card.title}

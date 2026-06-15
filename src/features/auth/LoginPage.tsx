@@ -72,7 +72,7 @@ const LoginPage = () => {
             <div className="absolute inset-0 bg-slate-900/70" />
 
             <div className="relative z-10 w-full max-w-md rounded-lg bg-white/95 backdrop-blur-md p-8 shadow-md">
-                <h1 className="mb-6 text-2xl font-semibold text-slate-900">
+                <h1 className="mb-6 text-2xl font-semibold text-black">
                     Sign in
                 </h1>
 
@@ -82,7 +82,7 @@ const LoginPage = () => {
                     className="space-y-4"
                 >
                     <label className="block">
-                        <span className="mb-1 block text-sm font-medium text-slate-700">
+                        <span className="mb-1 block text-sm font-medium text-black">
                             Email
                         </span>
 
@@ -97,7 +97,7 @@ const LoginPage = () => {
                     </label>
 
                     <label className="block">
-                        <span className="mb-1 block text-sm font-medium text-slate-700">
+                        <span className="mb-1 block text-sm font-medium text-black">
                             Password
                         </span>
 
@@ -143,11 +143,11 @@ const LoginPage = () => {
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-slate-600">
+                <p className="mt-6 text-center text-sm text-black">
                     Don&apos;t have an account?{" "}
                     <Link
                         to="/register"
-                        className="font-medium text-slate-900 hover:underline"
+                        className="font-medium text-blue-900 hover:underline"
                     >
                         Create one
                     </Link>
