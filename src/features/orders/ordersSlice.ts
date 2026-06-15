@@ -7,72 +7,76 @@ import {
   updateOrderApi,
 } from "./ordersService";
 import type {
+  Order,
   CreateOrderRequest,
-  OrdersState,
   UpdateOrderRequest,
+  OrdersState,
 } from "./ordersTypes";
 
-export const fetchOrders = createAsyncThunk(
-  "orders/fetchOrders",
-  async (_, thunkAPI) => {
-    try {
-      return await fetchOrdersApi();
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const fetchOrders = createAsyncThunk<
+  Order[],
+  void,
+  { rejectValue: string }
+>("orders/fetchOrders", async (_, thunkAPI) => {
+  try {
+    return await fetchOrdersApi();
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to load orders.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to load orders.",
+    );
+  }
+});
 
-export const createOrder = createAsyncThunk(
-  "orders/createOrder",
-  async (payload: CreateOrderRequest, thunkAPI) => {
-    try {
-      return await createOrderApi(payload);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const createOrder = createAsyncThunk<
+  Order,
+  CreateOrderRequest,
+  { rejectValue: string }
+>("orders/createOrder", async (payload, thunkAPI) => {
+  try {
+    return await createOrderApi(payload);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to create order.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to create order.",
+    );
+  }
+});
 
-export const updateOrder = createAsyncThunk(
-  "orders/updateOrder",
-  async (payload: UpdateOrderRequest, thunkAPI) => {
-    try {
-      return await updateOrderApi(payload);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const updateOrder = createAsyncThunk<
+  Order,
+  UpdateOrderRequest,
+  { rejectValue: string }
+>("orders/updateOrder", async (payload, thunkAPI) => {
+  try {
+    return await updateOrderApi(payload);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to update order.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to update order.",
+    );
+  }
+});
 
-export const deleteOrder = createAsyncThunk(
-  "orders/deleteOrder",
-  async (id: string, thunkAPI) => {
-    try {
-      await deleteOrderApi(id);
-      return id;
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const deleteOrder = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("orders/deleteOrder", async (id, thunkAPI) => {
+  try {
+    await deleteOrderApi(id);
+    return id;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to delete order.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
-
+        "Unable to delete order.",
+    );
+  }
+});
 const initialState: OrdersState = {
   orders: [],
   loading: false,

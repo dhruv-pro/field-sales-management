@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { User } from "../auth/authTypes";
 
 import {
   createUserApi,
@@ -12,66 +13,70 @@ import type {
   UsersState,
 } from "./usersTypes";
 
-export const fetchUsers = createAsyncThunk(
-  "users/fetchUsers",
-  async (_, thunkAPI) => {
-    try {
-      return await fetchUsersApi();
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const fetchUsers = createAsyncThunk<
+  User[],
+  void,
+  { rejectValue: string }
+>("users/fetchUsers", async (_, thunkAPI) => {
+  try {
+    return await fetchUsersApi();
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to load users.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to load users.",
+    );
+  }
+});
 
-export const createUser = createAsyncThunk(
-  "users/createUser",
-  async (payload: CreateUserRequest, thunkAPI) => {
-    try {
-      return await createUserApi(payload);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const createUser = createAsyncThunk<
+  User,
+  CreateUserRequest,
+  { rejectValue: string }
+>("users/createUser", async (payload, thunkAPI) => {
+  try {
+    return await createUserApi(payload);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to create user.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to create user.",
+    );
+  }
+});
 
-export const updateUser = createAsyncThunk(
-  "users/updateUser",
-  async (payload: UpdateUserRequest, thunkAPI) => {
-    try {
-      return await updateUserApi(payload);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const updateUser = createAsyncThunk<
+  User,
+  UpdateUserRequest,
+  { rejectValue: string }
+>("users/updateUser", async (payload, thunkAPI) => {
+  try {
+    return await updateUserApi(payload);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to update user.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to update user.",
+    );
+  }
+});
 
-export const deleteUser = createAsyncThunk(
-  "users/deleteUser",
-  async (id: string, thunkAPI) => {
-    try {
-      await deleteUserApi(id);
-      return id;
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const deleteUser = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("users/deleteUser", async (id, thunkAPI) => {
+  try {
+    await deleteUserApi(id);
+    return id;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to delete user.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to delete user.",
+    );
+  }
+});
 
 const initialState: UsersState = {
   users: [],

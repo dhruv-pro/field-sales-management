@@ -1,4 +1,4 @@
-import type { MouseEventHandler, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface ConfirmModalProps {
     open: boolean;

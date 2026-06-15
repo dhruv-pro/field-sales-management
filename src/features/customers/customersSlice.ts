@@ -8,71 +8,74 @@ import {
 } from "./customersService";
 import type {
   CreateCustomerRequest,
+  Customer,
   CustomersState,
   UpdateCustomerRequest,
 } from "./customersTypes";
 
-export const fetchCustomers = createAsyncThunk(
-  "customers/fetchCustomers",
-  async (_, thunkAPI) => {
-    try {
-      return await fetchCustomersApi();
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const fetchCustomers = createAsyncThunk<
+  Customer[], // Return type
+  void, // Argument type
+  { rejectValue: string }
+>("customers/fetchCustomers", async (_, thunkAPI) => {
+  try {
+    return await fetchCustomersApi();
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to load customers.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to load customers.",
+    );
+  }
+});
 
-export const createCustomer = createAsyncThunk(
-  "customers/createCustomer",
-  async (payload: CreateCustomerRequest, thunkAPI) => {
-    try {
-      return await createCustomerApi(payload);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const createCustomer = createAsyncThunk<
+  Customer,
+  CreateCustomerRequest,
+  { rejectValue: string }
+>("customers/createCustomer", async (payload, thunkAPI) => {
+  try {
+    return await createCustomerApi(payload);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to create customer.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
-
-export const updateCustomer = createAsyncThunk(
-  "customers/updateCustomer",
-  async (payload: UpdateCustomerRequest, thunkAPI) => {
-    try {
-      return await updateCustomerApi(payload);
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+        "Unable to create customer.",
+    );
+  }
+});
+export const updateCustomer = createAsyncThunk<
+  Customer,
+  UpdateCustomerRequest,
+  { rejectValue: string }
+>("customers/updateCustomer", async (payload, thunkAPI) => {
+  try {
+    return await updateCustomerApi(payload);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to update customer.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
+        "Unable to update customer.",
+    );
+  }
+});
 
-export const deleteCustomer = createAsyncThunk(
-  "customers/deleteCustomer",
-  async (id: string, thunkAPI) => {
-    try {
-      await deleteCustomerApi(id);
-      return id;
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
+export const deleteCustomer = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("customers/deleteCustomer", async (id, thunkAPI) => {
+  try {
+    await deleteCustomerApi(id);
+    return id;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data?.message ||
         error?.message ||
-        "Unable to delete customer.";
-      return thunkAPI.rejectWithValue(message);
-    }
-  },
-);
-
+        "Unable to delete customer.",
+    );
+  }
+});
 const initialState: CustomersState = {
   customers: [],
   loading: false,
