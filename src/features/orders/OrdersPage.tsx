@@ -24,7 +24,7 @@ const defaultFormValues: OrderFormValues = {
 
 const OrdersPage = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { orders, loading, error } = useSelector((state: RootState) => state.orders);
+    const { orders, loading } = useSelector((state: RootState) => state.orders);
     const { customers } = useSelector((state: RootState) => state.customers);
     const { visits } = useSelector((state: RootState) => state.visits);
     const { products } = useSelector((state: RootState) => state.products);
