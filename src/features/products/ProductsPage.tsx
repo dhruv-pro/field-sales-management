@@ -41,6 +41,8 @@ const ProductsPage = () => {
     const ITEMS_PER_PAGE = 5;
 
     const [currentPage, setCurrentPage] = useState(1);
+    const authUser = useSelector((state: RootState) => state.auth.user);
+    const userRole = authUser?.role;
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -200,13 +202,13 @@ const ProductsPage = () => {
                         placeholder="Search products"
                         className="w-full rounded border border-slate-300 bg-slate-50 px-3 py-2 outline-none focus:border-slate-500 sm:w-72"
                     />
-                    <button
+                    {(userRole === 'admin' || userRole === 'manager') && (<button
                         type="button"
                         onClick={openCreateForm}
                         className="inline-flex items-center justify-center rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
                     >
                         Add Product
-                    </button>
+                    </button>)}
                 </div>
             </div>
 
