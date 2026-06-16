@@ -38,14 +38,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
                 {/* Mobile Sidebar */}
                 <aside
-                    className={`fixed top-0 left-0 z-60 h-screen w-72 transform transition-transform duration-300 lg:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    className={`fixed inset-y-0 left-0 z-[60] w-72 overflow-y-auto transform transition-transform duration-300 lg:hidden ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
                         } ${isDark
-                            ? "bg-neutral-900 border-neutral-800"
-                            : "bg-white border-neutral-200"
+                            ? "bg-neutral-900 border-r border-neutral-800"
+                            : "bg-white border-r border-neutral-200"
                         }`}
                 >
-                    <div className="p-6 mt-7">
-                        <Sidebar />
+                    <div className="h-full p-6 pt-20">
+                        <Sidebar onNavigate={() => setSidebarOpen(false)} />
                     </div>
                 </aside>
 

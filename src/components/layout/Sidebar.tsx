@@ -4,7 +4,11 @@ import { useTheme } from "../../theme/ThemeContext";
 import type { RootState } from "../../app/store";
 import { getNavItemsForRole } from "../../utils/permissions";
 
-const Sidebar = () => {
+interface SidebarProps {
+    onNavigate?: () => void;
+}
+
+const Sidebar = ({ onNavigate }: SidebarProps) => {
     const { mode } = useTheme();
     const isDark = mode === "dark";
     const userRole = useSelector((state: RootState) => state.auth.user?.role);
@@ -27,6 +31,7 @@ const Sidebar = () => {
                             <NavLink
                                 key={item.label}
                                 to={item.to}
+                                onClick={onNavigate}
                                 className={({ isActive }) =>
                                     `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors duration-300 ${isActive
                                         ? "bg-slate-900 text-white"
