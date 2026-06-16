@@ -12,6 +12,7 @@ import type { AppDispatch, RootState } from "../../app/store";
 import type { CreateCustomerRequest, CustomerFormValues, UpdateCustomerRequest } from "./customersTypes";
 import Pagination from "../../components/common/Pagination";
 import { FaSpinner } from "react-icons/fa";
+import ConfirmModal from "../../components/common/ConfirmModal";
 
 const defaultFormValues: CustomerFormValues = {
     customerCode: "",
@@ -34,6 +35,8 @@ const CustomersPage = () => {
     const [formValues, setFormValues] = useState<CustomerFormValues>(defaultFormValues);
     const [searchTerm, setSearchTerm] = useState("");
     const ITEMS_PER_PAGE = 5;
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState<string | null>(null);
 
     const [currentPage, setCurrentPage] = useState(1);
     const authUser = useSelector((state: RootState) => state.auth.user);
@@ -166,16 +169,29 @@ const CustomersPage = () => {
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!window.confirm("Delete this customer?")) {
+    const cancelDelete = () => {
+        setConfirmOpen(false);
+        setDeleteId(null);
+    };
+
+    const handleDelete = (id: string) => {
+        setDeleteId(id);
+        setConfirmOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!deleteId) {
             return;
         }
 
         try {
-            await dispatch(deleteCustomer(id) as any);
+            await dispatch(deleteCustomer(deleteId) as any);
             toast.success("Customer deleted successfully.");
         } catch {
             // handled by slice / toast
+        } finally {
+            setConfirmOpen(false);
+            setDeleteId(null);
         }
     };
     const totalPages = Math.ceil(
@@ -418,6 +434,15 @@ const CustomersPage = () => {
                     </div>
                 )}
             </section>
+            <ConfirmModal
+                open={confirmOpen}
+                title="Delete Customer"
+                message="Are you sure you want to delete this Customer? This action cannot be undone."
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                onConfirm={confirmDelete}
+                onCancel={cancelDelete}
+            />
         </div>
     );
 };

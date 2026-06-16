@@ -256,13 +256,13 @@ const DashboardPage = () => {
                     </h3>
 
                     <div className="space-y-5">
-                        {data?.topSales?.map((sale: any) => (
-                            <div key={sale._id._id}>
+                        {data?.topSales?.map((sale: any, index: any) => (
+                            <div key={index + 1}>
                                 <div className="mb-2 flex justify-between">
                                     <div>
                                         <p className="font-medium text-gray-900">
-                                            {sale._id.firstName}{" "}
-                                            {sale._id.lastName}
+                                            {sale._id?.firstName}{" "}
+                                            {sale._id?.lastName}
                                         </p>
 
                                         <p className="text-sm text-gray-500">
@@ -337,7 +337,7 @@ const DashboardPage = () => {
                                     <td className="p-3">
                                         <p className="font-medium text-gray-900">
                                             {record.user
-                                                ? `${record.user.firstName ?? ""} ${record.user.lastName ?? ""}`.trim()
+                                                ? `${record?.user?.firstName ?? ""} ${record?.user?.lastName ?? ""}`.trim()
                                                 : "Unknown"}
                                         </p>
                                         <p className="text-sm text-gray-500">
@@ -547,7 +547,7 @@ hover:bg-blue-50
 
                                     <td className="p-3">
                                         {order.employee
-                                            ? `${order.employee.firstName ?? ""} ${order.employee.lastName ?? ""}`.trim()
+                                            ? `${order?.employee?.firstName ?? ""} ${order?.employee?.lastName ?? ""}`.trim()
                                             : "Unknown"}
                                     </td>
 
