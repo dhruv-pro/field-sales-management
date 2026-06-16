@@ -5,7 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../theme/ThemeContext";
 import { logout } from "../../features/auth/authSlice";
 
-const Navbar = () => {
+interface NavbarProps {
+    sidebarOpen: boolean;
+    setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Navbar = ({
+    sidebarOpen,
+    setSidebarOpen,
+}: NavbarProps) => {
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { mode, toggleTheme } = useTheme();
@@ -21,18 +30,57 @@ const Navbar = () => {
     const toTitleCase = (text: string) =>
         text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
     return (
-        <header className={`sticky top-0 z-50  border-b transition-colors duration-300 px-6 py-4 shadow-sm ${isDark
-            ? "border-neutral-800 bg-neutral-900"
-            : "border-neutral-200 bg-white"
-            }`}>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <p className={`text-sm font-medium uppercase tracking-[0.3em] ${isDark ? "text-neutral-500" : "text-neutral-400"
-                        }`}>
-                        Sales Force
-                    </p>
-                    <h1 className={`text-xl font-semibold ${isDark ? "text-neutral-50" : "text-neutral-900"
-                        }`}>Main dashboard</h1>
+
+        <header
+            className={`sticky top-0 z-30 border-b px-6 py-4 shadow-sm ${isDark
+                ? "border-neutral-800 bg-neutral-900"
+                : "border-neutral-200 bg-white"
+                }`}
+        >
+            <div className="flex items-center justify-between gap-4">
+
+                {/* Left Section */}
+                <div className="flex items-center gap-3">
+
+                    <button
+                        type="button"
+                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                        className={`lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-md ${isDark
+                            ? "bg-neutral-800 text-white"
+                            : "bg-neutral-100 text-neutral-900"
+                            }`}
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 6h16M4 12h16M4 18h16"
+                            />
+                        </svg>
+                    </button>
+
+                    <div>
+                        <p
+                            className={`text-sm font-medium uppercase tracking-[0.3em] ${isDark ? "text-neutral-500" : "text-neutral-400"
+                                }`}
+                        >
+                            Sales Force
+                        </p>
+
+                        <h1
+                            className={`text-xl font-semibold ${isDark ? "text-neutral-50" : "text-neutral-900"
+                                }`}
+                        >
+                            Main Dashboard
+                        </h1>
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-3">
