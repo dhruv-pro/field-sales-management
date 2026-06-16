@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+
 
 import {
     createVisit,
@@ -29,6 +32,7 @@ const defaultFormValues: VisitFormValues = {
     },
     notes: "",
 };
+
 
 const VisitStatusBadge = ({ status }: { status?: string }) => {
     const config = visitStatusStyles[status ?? ""] ?? {
@@ -125,8 +129,25 @@ const VisitsPage = () => {
     const [uploadingSelfieVisitId, setUploadingSelfieVisitId] = useState<string | null>(null);
     const [previewImage, setPreviewImage] = useState<{ src: string; alt: string } | null>(null);
     const ITEMS_PER_PAGE = 5;
+    const [selectedLocation, setSelectedLocation] = useState<{
+        latitude: number;
+        longitude: number;
+        address: string;
+    } | null>(null);
 
     const [currentPage, setCurrentPage] = useState(1);
+
+    function ResizeMap() {
+        const map = useMap();
+
+        useEffect(() => {
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }, [map]);
+
+        return null;
+    }
 
     const refreshVisits = () => {
         if (userRole === "employee") {
@@ -337,7 +358,7 @@ const VisitsPage = () => {
 
 
     return (
-        <div className="space-y-6">
+        <div >
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">{pageTitle}</h1>
@@ -449,7 +470,7 @@ const VisitsPage = () => {
                 </section>
             )}
 
-            <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <section className="rounded-2xl border border-slate-200 bg-white shadow-sm mt-3">
                 <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
                     <div>
                         <h2 className="text-lg font-semibold text-gray-900">Visit records</h2>
@@ -513,11 +534,22 @@ const VisitsPage = () => {
                                                 </td>
 
                                                 <td className="max-w-[220px] px-4 py-4">
-                                                    <p className="text-slate-700">{visit.location?.address || "—"}</p>
-                                                    <p className="mt-1 font-mono text-xs text-slate-400">
-                                                        {visit.location?.latitude?.toFixed(5)},{" "}
-                                                        {visit.location?.longitude?.toFixed(5)}
-                                                    </p>
+                                                    <td className="px-4 py-4">
+                                                        <button
+                                                            type="button"
+                                                            className="text-blue-600 underline hover:text-blue-800"
+                                                            onClick={() =>
+                                                                setSelectedLocation({
+                                                                    latitude: visit.location.latitude,
+                                                                    longitude: visit.location.longitude,
+                                                                    address: visit.location.address,
+                                                                })
+                                                            }
+                                                        >
+                                                            {visit.location.latitude.toFixed(4)},{" "}
+                                                            {visit.location.longitude.toFixed(4)}
+                                                        </button>
+                                                    </td>
                                                 </td>
 
                                                 <td className="px-4 py-4">
@@ -652,7 +684,64 @@ const VisitsPage = () => {
                     </div>
                 )}
             </section>
+            {selectedLocation && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 "
+                    onClick={() => setSelectedLocation(null)}
+                >
+                    <div
+                        className="bg-white rounded-xl p-4 w-full max-w-3xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-lg font-semibold">
+                                Visit Location
+                            </h2>
 
+                            <button
+                                onClick={() => setSelectedLocation(null)}
+                                className="inline-flex items-center justify-center rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+                            >
+                                Close
+                            </button>
+                        </div>
+
+                        <p className="mb-3 text-sm text-gray-600">
+                            {selectedLocation.address}
+                        </p>
+
+                        <MapContainer
+                            center={[
+                                selectedLocation.latitude,
+                                selectedLocation.longitude,
+                            ]}
+                            zoom={15}
+                            style={{
+                                height: "450px",
+                                width: "100%",
+                            }}
+                        >
+                            <ResizeMap />
+
+                            <TileLayer
+                                attribution="&copy; OpenStreetMap contributors"
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+
+                            <Marker
+                                position={[
+                                    selectedLocation.latitude,
+                                    selectedLocation.longitude,
+                                ]}
+                            >
+                                <Popup>
+                                    {selectedLocation.address}
+                                </Popup>
+                            </Marker>
+                        </MapContainer>
+                    </div>
+                </div>
+            )}
             {previewImage && (
                 <div
                     className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-4"
