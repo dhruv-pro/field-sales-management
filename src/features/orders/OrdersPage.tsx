@@ -62,10 +62,22 @@ const OrdersPage = () => {
     );
 
     const getVisitLabel = (visit: any) => {
-        const customer = customers.find((item) => item._id === visit.customer);
-        const customerName = customer?.customerName ?? "Unknown customer";
+        let customerName = "Unknown customer";
+
+        if (typeof visit.customer === "object") {
+            customerName = visit.customer?.customerName ?? customerName;
+        } else {
+            const customer = customers.find(
+                (item) => item._id === visit.customer
+            );
+            customerName = customer?.customerName ?? customerName;
+        }
+
         const address = visit.location?.address;
-        return address ? `${customerName} — ${address}` : `${customerName} — ${visit.notes ?? `Visit ${visit._id}`}`;
+
+        return address
+            ? `${customerName} — ${address}`
+            : `${customerName} — ${visit.notes || `Visit ${visit._id}`}`;
     };
 
     const openCreateForm = () => {

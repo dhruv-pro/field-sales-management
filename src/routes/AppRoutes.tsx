@@ -22,7 +22,7 @@ const AppRoutes = () => {
             <Route
                 path='/dashboard'
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute roles={["admin", "manager"]}>
                         <MainLayout>
                             <DashboardPage />
                         </MainLayout>
@@ -33,7 +33,7 @@ const AppRoutes = () => {
             <Route
                 path='/users'
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute roles={["admin"]}>
                         <MainLayout>
                             <UsersPage />
                         </MainLayout>
@@ -43,7 +43,7 @@ const AppRoutes = () => {
             <Route
                 path='/attendence'
                 element={
-                    <PrivateRoute>
+                    <PrivateRoute roles={["employee", "manager"]}>
                         <MainLayout>
                             <AttendancePage />
                         </MainLayout>
