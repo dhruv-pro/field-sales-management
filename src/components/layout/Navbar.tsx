@@ -18,7 +18,8 @@ const Navbar = () => {
         setProfileMenuOpen(false);
         navigate("/login");
     };
-
+    const toTitleCase = (text: string) =>
+        text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
     return (
         <header className={`sticky top-0 z-50  border-b transition-colors duration-300 px-6 py-4 shadow-sm ${isDark
             ? "border-neutral-800 bg-neutral-900"
@@ -39,9 +40,11 @@ const Navbar = () => {
                         ? "bg-neutral-800 text-neutral-300"
                         : "bg-neutral-100 text-neutral-600"
                         }`}>
-                        {authUser
-                            ? `${authUser.firstName} ${authUser.lastName} (${authUser.role})`
-                            : "User"}
+                        {
+                            authUser
+                                ? `${toTitleCase(authUser.firstName)} ${toTitleCase(authUser.lastName)} (${toTitleCase(authUser.role)})`
+                                : "User"
+                        }
                     </div>
 
                     <button

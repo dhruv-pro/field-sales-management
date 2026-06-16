@@ -19,6 +19,11 @@ export const createOrderApi = async (
   payload: CreateOrderRequest,
 ): Promise<Order> => {
   const response = await api.post(API_ENDPOINTS.ORDERS, payload);
+
+  if (response.data?.success === false) {
+    throw new Error(response.data.message);
+  }
+
   return getResponseData<Order>(response);
 };
 
@@ -28,6 +33,10 @@ export const updateOrderApi = async (
   const { id, ...body } = payload;
 
   const response = await api.put(API_ENDPOINTS.ORDER_BY_ID(id), body);
+
+  if (response.data?.success === false) {
+    throw new Error(response.data.message);
+  }
 
   return getResponseData<Order>(response);
 };

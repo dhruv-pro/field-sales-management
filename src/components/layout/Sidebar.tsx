@@ -20,22 +20,27 @@ const Sidebar = () => {
                     MENU
                 </div>
                 <nav className="space-y-1">
-                    {visibleNavItems.map((item) => (
-                        <NavLink
-                            key={item.label}
-                            to={item.to}
-                            className={({ isActive }) =>
-                                `flex items-center rounded-xl px-4 py-3 text-sm font-medium transition-colors duration-300 ${isActive
-                                    ? "bg-slate-900 text-white"
-                                    : isDark
-                                        ? "text-neutral-300 hover:bg-black"
-                                        : "text-black hover:bg-slate-100"
-                                }`
-                            }
-                        >
-                            {item.label}
-                        </NavLink>
-                    ))}
+                    {visibleNavItems.map((item) => {
+                        const Icon = item.icon;
+
+                        return (
+                            <NavLink
+                                key={item.label}
+                                to={item.to}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors duration-300 ${isActive
+                                        ? "bg-slate-900 text-white"
+                                        : isDark
+                                            ? "text-neutral-300 hover:bg-black"
+                                            : "text-black hover:bg-slate-100"
+                                    }`
+                                }
+                            >
+                                <Icon className="text-lg shrink-0" />
+                                <span>{item.label}</span>
+                            </NavLink>
+                        );
+                    })}
                 </nav>
             </div>
 

@@ -44,12 +44,6 @@ const OrdersPage = () => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
-    useEffect(() => {
-        if (error) {
-            toast.error(error);
-        }
-    }, [error]);
-
     const filteredOrders = useMemo(
         () =>
             orders.filter((order) =>
@@ -173,15 +167,22 @@ const OrdersPage = () => {
 
         try {
             if (selectedOrder) {
-                await dispatch(updateOrder(payload as UpdateOrderRequest) as any);
+                await dispatch(
+                    updateOrder(payload as UpdateOrderRequest)
+                ).unwrap();
+
                 toast.success("Order updated successfully.");
             } else {
-                await dispatch(createOrder(payload as CreateOrderRequest) as any);
+                await dispatch(
+                    createOrder(payload as CreateOrderRequest)
+                ).unwrap();
+
                 toast.success("Order created successfully.");
             }
+
             closeForm();
-        } catch {
-            // handled by slice / toast
+        } catch (error: any) {
+            toast.error(error || "Operation failed");
         }
     };
 
