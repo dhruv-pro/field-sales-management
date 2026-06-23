@@ -8,6 +8,7 @@ import ordersReducer from "../features/orders/ordersSlice";
 import productsReducer from "../features/products/productsSlice";
 import attendanceReducer from "../features/attendance/attendanceSlice";
 import reportReducer from "../features/reports/reportSlice";
+import notificationReducer from "../features/notification/notificationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     products: productsReducer,
     attendance: attendanceReducer,
     reports: reportReducer,
+    notification: notificationReducer,
   },
 });
 
